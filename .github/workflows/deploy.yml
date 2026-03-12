@@ -27,7 +27,7 @@ jobs:
             tofu_version: '1.11.0'
 
         - name: Setup Terragrunt
-          uses: autero1/setup-terragrunt@v3
+          uses: autero1/action-terragrunt@v3.0.2
 
         - name: Configure AWS credentials
           uses: aws-actions/configure-aws-credentials@v5
@@ -41,7 +41,7 @@ jobs:
             terraform validate
 
         - name: tfsec scan
-          uses: aquasecurity/tfsec-action@v1
+          uses: aquasecurity/tfsec-action@v1.0.3
 
         - name: Run Terraform Plan
           run: |
