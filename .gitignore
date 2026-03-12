@@ -1,0 +1,35 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*.tfvars
+*.tfvars.json
+terraform.tfvars
+terraform.tfvars.json
+.terraformrc
+*.tfplan
+terraform.tfplan
+
+# Terragrunt
+.terragrunt-cache/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Sensitive keys
+*.pem
+*.key
+
+# Personal notes
+my-notes.md
+
+# Test files
+test/**

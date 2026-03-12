@@ -1,0 +1,53 @@
+name: Deployment Pipeline
+on:
+  push:
+    branches: [main] 
+  pull_request:
+  workflow_dispatch:
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Set up Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.13'
+
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+
+        - name: Setup OpenTofu
+          uses: opentofu/setup-opentofu@v1
+          with:
+            tofu_version: '1.11.0'
+
+        - name: Setup Terragrunt
+          uses: autero1/setup-terragrunt@v3
+
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v5
+          with:
+            aws-region: us-east-1 
+              
+        - name: Lint Terraform code
+          run: |
+            cd environments/sandbox
+            terraform fmt -check
+            terraform validate
+
+        - name: tfsec scan
+          uses: aquasecurity/tfsec-action@v1
+
+        - name: Run Terraform Plan
+          run: |
+            cd environments/sandbox
+            terragrunt run --all plan
+
+        - name: Run tests
+          run: |
+            python3 test/e2e_test.py
