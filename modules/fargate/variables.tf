@@ -21,8 +21,13 @@ variable "sns_topic_arn" {
 
 variable "message" {
   description = "Message to publish to SNS"
-  type        = string
-  default     = "Hello from Fargate task"
+  type        = map(string)
+  default     = {
+    email = ""
+    source = "Lambda"
+    region = ""
+    repo = ""
+  }
 }
 
 variable "cpu" {

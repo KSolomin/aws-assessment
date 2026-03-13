@@ -30,6 +30,7 @@ terraform.tfplan
 
 # Personal notes
 my-notes.md
+.env
 
 # Test files
 test/**

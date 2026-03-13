@@ -1,6 +1,7 @@
 data "aws_vpc" "default" {
   default = true
 }
+
 data "aws_region" "current" {}
 
 resource "aws_ecs_cluster" "this" {
@@ -90,9 +91,7 @@ resource "aws_ecs_task_definition" "this" {
       image     = "amazon/aws-cli"
       essential = true
       command   = [
-        "sh",
-        "-c",
-        "aws sns publish --topic-arn ${var.sns_topic_arn} --message '${var.message}'"
+        "sns publish --topic-arn ${var.sns_topic_arn} --message '${jsonencode(var.message)}'"
       ]
     }
   ])

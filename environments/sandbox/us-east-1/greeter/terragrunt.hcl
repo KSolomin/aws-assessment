@@ -17,6 +17,8 @@ inputs = {
   environment_variables = {
     TABLE_NAME    = "GreetingLogs"
     SNS_TOPIC_ARN = ""
+    EMAIL = ""
+    REPO = ""
   }
   dynamodb_table_name = dependency.dynamodb.outputs.table_name
   create_role         = true

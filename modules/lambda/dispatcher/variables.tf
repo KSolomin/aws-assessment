@@ -10,8 +10,8 @@ variable "runtime" {
 
 variable "handler" {
   type        = string
-  description = "Handler entrypoint (e.g. dispatcher.handler)"
-  default     = "dispatcher.handler"
+  description = "Handler entrypoint (e.g. dispatcher.lambda_handler)"
+  default     = "dispatcher.lambda_handler"
 }
 
 variable "environment_variables" {

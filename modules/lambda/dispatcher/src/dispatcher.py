@@ -1,16 +1,15 @@
 import json
 import boto3
+import os
 from botocore.exceptions import ClientError
 
 
-def run_fargate_task(cluster_name, task_definition, subnet_ids, security_group_ids, region_name=None):
+def run_fargate_task(cluster_name, task_definition, region_name=None):
     """Run a standalone Fargate task via ECS.
 
     Parameters:
         cluster_name (str): ECS cluster name or ARN.
         task_definition (str): Task definition family[:revision] or ARN.
-        subnet_ids (list): List of subnet IDs (awsvpc network mode).
-        security_group_ids (list): List of security group IDs (awsvpc).
         region_name (str, optional): Region to use.
 
     Returns:
@@ -26,14 +25,7 @@ def run_fargate_task(cluster_name, task_definition, subnet_ids, security_group_i
         response = ecs.run_task(
             cluster=cluster_name,
             launchType="FARGATE",
-            taskDefinition=task_definition,
-            networkConfiguration={
-                "awsvpcConfiguration": {
-                    "subnets": subnet_ids,
-                    "securityGroups": security_group_ids,
-                    "assignPublicIp": "ENABLED",
-                }
-            },
+            taskDefinition=task_definition
         )
         return response
     except ClientError as e:
@@ -43,23 +35,18 @@ def run_fargate_task(cluster_name, task_definition, subnet_ids, security_group_i
 
 def lambda_handler(event, context):
     """Lambda entry point expecting keys in the event:
-
     {
         "cluster": "my-cluster",
         "taskDefinition": "my-task-def",
-        "subnets": ["subnet-123", "subnet-456"],
-        "securityGroups": ["sg-123", "sg-456"],
         "region": "us-east-1"  # optional
     }
     """
     try:
-        cluster = event["cluster"]
-        task_definition = event["taskDefinition"]
-        subnets = event.get("subnets", [])
-        security_groups = event.get("securityGroups", [])
-        region = event.get("region")
+        cluster = os.environ.get("CLUSTER_NAME")
+        task_definition = os.environ.get("TASK_DEFINITION")
+        region = os.environ.get("AWS_REGION")
 
-        result = run_fargate_task(cluster, task_definition, subnets, security_groups, region_name=region)
+        result = run_fargate_task(cluster, task_definition, region_name=region)
         return {
             "statusCode": 200,
             "body": json.dumps(result, default=str)

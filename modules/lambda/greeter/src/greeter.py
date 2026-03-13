@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime
 
 dynamodb = boto3.resource("dynamodb")
-sns = boto3.client("sns")
+sns = boto3.client("sns", region_name='us-east-1')
 
 TABLE_NAME = os.environ["TABLE_NAME"]
 SNS_TOPIC_ARN = os.environ["SNS_TOPIC_ARN"]
