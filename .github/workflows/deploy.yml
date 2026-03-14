@@ -43,8 +43,8 @@ jobs:
         - name: tfsec scan
           uses: aquasecurity/tfsec-action@v1.0.3
 
-        - name: Assume AWS ROLE
-          uses: aws-actions/assume-role@v1
+        - name: Assume AWS Role
+          uses: aws-actions/configure-aws-credentials@v6.0.0
           with:
             role-arn: ${{ secrets.AWS_ROLE_ARN }}
             role-session-name: github-actions
