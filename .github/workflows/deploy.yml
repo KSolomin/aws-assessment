@@ -43,11 +43,13 @@ jobs:
         - name: tfsec scan
           uses: aquasecurity/tfsec-action@v1.0.3
 
-        - name: Assume AWS Role
+        # It's better to establish trust between GitHub Actions and AWS using OIDC, but for simplicity, let's use static keys.
+        - name: Assume AWS User
           uses: aws-actions/configure-aws-credentials@v6.0.0
           with:
-            role-arn: ${{ secrets.AWS_ROLE_ARN }}
-            role-session-name: github-actions
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
 
         - name: Run Terraform Plan
           run: |
