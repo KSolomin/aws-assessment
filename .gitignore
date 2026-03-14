@@ -32,5 +32,4 @@ terraform.tfplan
 my-notes.md
 .env
 
-# Test files
-test/**
+venv/

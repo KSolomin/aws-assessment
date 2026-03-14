@@ -19,7 +19,7 @@ jobs:
         - name: Install dependencies
           run: |
             python -m pip install --upgrade pip
-            pip install -r requirements.txt
+            pip install -r test/requirements.txt
 
         - name: Setup OpenTofu
           uses: opentofu/setup-opentofu@v1
@@ -43,6 +43,12 @@ jobs:
         - name: tfsec scan
           uses: aquasecurity/tfsec-action@v1.0.3
 
+        - name: Assume AWS ROLE
+          uses: aws-actions/assume-role@v1
+          with:
+            role-arn: ${{ secrets.AWS_ROLE_ARN }}
+            role-session-name: github-actions
+
         - name: Run Terraform Plan
           run: |
             cd environments/sandbox
@@ -51,3 +57,4 @@ jobs:
         - name: Run tests
           run: |
             python3 test/e2e_test.py
+          if: always()
